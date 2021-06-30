@@ -27,25 +27,12 @@ public class UserRepositoryTest extends StudyApplicationTests {
 
     @Test
     public void create(){
-        /*
-        // String sql = insert into user (%s, %s, %d) value (account, email, age);
-        User user = new User();
-        // user.setId() - auto increase 설정했기 때문에 여기서는 작성 x
-        user.setAccount("TestUser01");
-        user.setEmail("TestUser01@gmail.com");
-        user.setPhoneNumber("010-1111-1111");
-        user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy("user01");
 
-        User newUser = userRepository.save(user);
-        System.out.println("newUser : " + newUser);
-         */
-
-        String account = "Test01";
-        String password = "Test01";
+        String account = "Test02";
+        String password = "Test02";
         String status = "REGISTERED";
-        String email = "Test01@gmail.com";
-        String phoneNumber = "010-1111-2222";
+        String email = "Test02@gmail.com";
+        String phoneNumber = "010-2222-2222";
         LocalDateTime registeredAt = LocalDateTime.now();
         LocalDateTime createdAt = LocalDateTime.now();
         String createdBy = "AdminServer";
@@ -57,8 +44,16 @@ public class UserRepositoryTest extends StudyApplicationTests {
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
         user.setRegisteredAt(registeredAt);
-        user.setCreatedAt(createdAt);
-        user.setCreatedBy(createdBy);
+        //user.setCreatedAt(createdAt);
+        //user.setCreatedBy(createdBy);
+        
+        // Builder 생성자 패턴을 사용해 객체를 생성
+        User u = User.builder()
+                .account(account)
+                .password(password)
+                .status(status)
+                .email(email)
+                .build();
 
         User newUser = userRepository.save(user);
         Assertions.assertNotNull(newUser);
@@ -68,24 +63,39 @@ public class UserRepositoryTest extends StudyApplicationTests {
     @Test
     @Transactional
     public void read() {
-
-        /*
-        // select * from user where id = ?
-        Optional<User> user = userRepository.findByAccount("TestUser01");      // id = 2
-
-        user.ifPresent(selectUser -> {
-            //System.out.println("user : " + selectUser);
-            //System.out.println("email : " + selectUser.getEmail());
-
-            selectUser.getOrderDetailList().stream().forEach(detail ->{
-                Item item = detail.getItem();
-                System.out.println(item);
-                //System.out.println(detail.getItemId());
-            });
-        });
-         */
-
         User user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-1111-2222");
+
+        // @Accessors(chain = ture) 를 사용할 때 가능한 방법
+        /*
+        user
+            .setEmail("")
+            .setPhoneNumber("")
+            .setStatus("");
+
+        User u = new User().setAccount("").setEmail("").setPassword("");
+        */
+
+        if(user != null) {
+            user.getOrderGroupList().stream().forEach(orderGroup -> {
+                System.out.println("-----------------주문묶음------------------");
+                System.out.println("수령인 : " + orderGroup.getRevName());
+                System.out.println("수령지 : " + orderGroup.getRevAddress());
+                System.out.println("총금액 : " + orderGroup.getTotalPrice());
+                System.out.println("총수량" + orderGroup.getTotalQuantity());
+
+                System.out.println("-----------------주문상세------------------");
+
+                orderGroup.getOrderDetailList().forEach(orderDetail -> {
+                    System.out.println("파트너사 이름 : " + orderDetail.getItem().getPartner().getName());
+                    System.out.println("파트너사 카테고리 : " + orderDetail.getItem().getPartner().getCategory().getTitle());
+                    System.out.println("주문상품 : " + orderDetail.getItem().getName());
+                    System.out.println("고객센터 번호 : " + orderDetail.getItem().getPartner().getCallCenter());
+                    System.out.println("주문의 상태 : " + orderDetail.getStatus());
+                    System.out.println("도착예정일자 : " + orderDetail.getArrivalDate());
+                });
+            });
+        }
+
         Assertions.assertNotNull(user);
     }
 
@@ -115,14 +125,6 @@ public class UserRepositoryTest extends StudyApplicationTests {
         });
 
         Optional<User> deleteUser = userRepository.findById(2L);
-
-        /*
-        if(deleteUser.isPresent()){
-            System.out.println("데이터 존재 : " + deleteUser.get());
-        }else{
-            System.out.println("데이터 삭제 데이터 없음");
-        }
-        */
 
         Assertions.assertFalse(deleteUser.isPresent()); // false
 

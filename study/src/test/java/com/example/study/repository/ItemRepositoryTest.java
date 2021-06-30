@@ -15,15 +15,6 @@ public class ItemRepositoryTest extends StudyApplicationTests {
 
     @Test
     public void create() {
-        /*
-        Item item = new Item();
-        item.setName("노트북");
-        item.setPrice(100000);
-        item.setContent("삼성 노트북");
-
-        Item newItem = itemRepository.save(item);
-        Assertions.assertNotNull(newItem);
-         */
         Item item = new Item();
         item.setStatus("UNREGISTERED");
         item.setName("삼성 노트북");
@@ -34,7 +25,7 @@ public class ItemRepositoryTest extends StudyApplicationTests {
         item.setRegisteredAt(LocalDateTime.now());
         item.setCreatedAt(LocalDateTime.now());
         item.setCreatedBy("Partner01");
-        item.setPartnerId(1L);
+        //item.setPartnerId(1L); // Long -> Partner
 
         Item newItem = itemRepository.save(item);
         Assertions.assertNotNull(newItem);
