@@ -48,12 +48,14 @@ public class UserRepositoryTest extends StudyApplicationTests {
         //user.setCreatedBy(createdBy);
         
         // Builder 생성자 패턴을 사용해 객체를 생성
+        /*
         User u = User.builder()
                 .account(account)
                 .password(password)
                 .status(status)
                 .email(email)
                 .build();
+        */
 
         User newUser = userRepository.save(user);
         Assertions.assertNotNull(newUser);
