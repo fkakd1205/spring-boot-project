@@ -7,3 +7,4 @@
 
 #### 1. 스프링 부트 프로젝트(어드민 페이지 만들기) by 예상국
 * 실습 : [study](./study)
+<img src="https://user-images.githubusercontent.com/35367660/124502986-86a08d80-ddff-11eb-8fa9-b64dd60a20ca.PNG" width="800">
