@@ -3,6 +3,7 @@ package com.example.study.repository;
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.Item;
 import com.example.study.model.entity.User;
+import com.example.study.model.enumclass.UserStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +31,7 @@ public class UserRepositoryTest extends StudyApplicationTests {
 
         String account = "Test02";
         String password = "Test02";
-        String status = "REGISTERED";
+        UserStatus status = UserStatus.REGISTERED;
         String email = "Test02@gmail.com";
         String phoneNumber = "010-2222-2222";
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -44,18 +45,6 @@ public class UserRepositoryTest extends StudyApplicationTests {
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
         user.setRegisteredAt(registeredAt);
-        //user.setCreatedAt(createdAt);
-        //user.setCreatedBy(createdBy);
-        
-        // Builder 생성자 패턴을 사용해 객체를 생성
-        /*
-        User u = User.builder()
-                .account(account)
-                .password(password)
-                .status(status)
-                .email(email)
-                .build();
-        */
 
         User newUser = userRepository.save(user);
         Assertions.assertNotNull(newUser);
@@ -66,16 +55,6 @@ public class UserRepositoryTest extends StudyApplicationTests {
     @Transactional
     public void read() {
         User user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-1111-2222");
-
-        // @Accessors(chain = ture) 를 사용할 때 가능한 방법
-        /*
-        user
-            .setEmail("")
-            .setPhoneNumber("")
-            .setStatus("");
-
-        User u = new User().setAccount("").setEmail("").setPassword("");
-        */
 
         if(user != null) {
             user.getOrderGroupList().stream().forEach(orderGroup -> {
